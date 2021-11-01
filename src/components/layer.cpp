@@ -34,13 +34,16 @@ namespace SimpleGE
 
   void LayerComponent::Display(const Timing& timing)
   {
+    //Sans batching autour de 130-140 appels de rendus moyens
+    //Get the sprites
     auto layerSprites = ListSprites(Owner().shared_from_this());
     if (layerSprites.empty())
     {
       return;
     }
-
     auto spriteSheet = gsl::at(layerSprites, 0)->GetSpriteSheet();
     Ensures(spriteSheet.Ready());
+    //Display the layer's sprites
+    
   }
 } // namespace SimpleGE

@@ -1,3 +1,8 @@
 {
-"cmake.copyCompileCommands": "${workspaceFolder}/compile_commands.json"
+"cmake.copyCompileCommands": "${workspaceFolder}/compile_commands.json",
+"files.associations": {
+    "gsl_assert": "cpp",
+    "xstring": "cpp",
+    "memory": "cpp"
+}
 }
