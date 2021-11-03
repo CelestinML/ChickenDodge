@@ -1,4 +1,5 @@
 #include <simplege/simplege.h>
+#include <vector>
 
 #include "../graphics/graphicapi.h"
 
@@ -45,12 +46,28 @@ namespace SimpleGE
     }
     auto spriteSheet = gsl::at(layerSprites, 0)->GetSpriteSheet();
     Ensures(spriteSheet.Ready());
+
+    //Create VertexBuffer
+    std::vector<Vertex> vertices{layerSprites.size() * 4};
+    m_vertexBuffer = Graphic::VertexBuffer::Create(gsl::span<const Vertex>(vertices),
+                                                   Graphic::VertexBuffer::Usage::Dynamic);
+
+    //Create IndexBuffer
+    std::vector<std::uint16_t> indices;
+    indices.resize(layerSprites.size() * 6);
+    m_indexBuffer = Graphic::IndexBuffer::Create(gsl::span<const std::uint16_t>(indices),
+                                                 Graphic::IndexBuffer::Usage::Dynamic);
+
+    int offset = 0;
+
     //Display the layer's sprites
     for (auto sprite : layerSprites) {
-      spriteSheet->Bind(sprite->GetVertexBuffer(), sprite->GetIndexBuffer());
-      glDrawElements(GL_TRIANGLES, (GLsizei) sprite->GetIndices().size(), GL_UNSIGNED_SHORT, nullptr);
-      spriteSheet->Unbind();
+      sprite->UpdateComponents(m_vertexBuffer, offset * 4, m_indexBuffer, offset * 6);
+      offset++;
     }
+    spriteSheet->Bind(m_vertexBuffer, m_indexBuffer);
+    glDrawElements(GL_TRIANGLES, (GLsizei) layerSprites.size() * 6, GL_UNSIGNED_SHORT, nullptr);
+    spriteSheet->Unbind();
     
   }
 } // namespace SimpleGE

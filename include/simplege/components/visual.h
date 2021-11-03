@@ -7,9 +7,16 @@
 
 namespace SimpleGE
 {
+  struct Vertex
+  {
+    float x, y, z;
+    float u, v;
+  };
+
   class VisualComponent : public virtual Component
   {
   public:
+
     inline VisualComponent();
     inline ~VisualComponent() override;
 

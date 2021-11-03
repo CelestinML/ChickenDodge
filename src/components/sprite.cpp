@@ -29,12 +29,6 @@ namespace SimpleGE
     j.at("spriteSheet").get_to(desc.spriteSheet);
   }
 
-  struct Vertex
-  {
-    float x, y, z;
-    float u, v;
-  };
-
   struct SpriteImpl
   {
     ComponentReference<SpriteSheetComponent> spriteSheet;
@@ -47,10 +41,10 @@ namespace SimpleGE
     int animWaitCounter{};
     const SpriteSheetComponent::Frame* descr{};
     Size<int> spriteSize{};
-    std::shared_ptr<Graphic::VertexBuffer> vertexBuffer;
+    //std::shared_ptr<Graphic::VertexBuffer> vertexBuffer;
     std::array<Vertex, 4> vertices{};
     static constexpr std::array<std::uint16_t, 6> Indices{0, 1, 2, 2, 3, 0};
-    std::shared_ptr<Graphic::IndexBuffer> indexBuffer;
+    //std::shared_ptr<Graphic::IndexBuffer> indexBuffer;
 
     // Cette méthode met à jour les informations relatives à la sprite
     // à afficher.
@@ -92,7 +86,7 @@ namespace SimpleGE
     // Cette méthode met à jour le contenu de chaque vertex, soient
     // leurs position et les coordonnées de texture, en tenant compte
     // des transformations et de la sprite courante.
-    void UpdateComponents(Entity& owner)
+    void UpdateComponents(Entity& owner, std::shared_ptr<Graphic::VertexBuffer>& vertexBuffer, int offsetVertex, std::shared_ptr<Graphic::IndexBuffer> indexBuffer, int offsetIndex)
     {
       if (!descr)
         return; // HACK
@@ -117,8 +111,14 @@ namespace SimpleGE
       }};
 
       std::copy(v.begin(), v.end(), vertices.begin());
-      vertexBuffer->Update(gsl::span<const Vertex>(vertices), 0);
-      indexBuffer->Update(gsl::span<const std::uint16_t>(Indices), 0);
+      vertexBuffer->Update(gsl::span<const Vertex>(vertices), offsetVertex);
+
+      std::array<std::uint16_t, 6> indices;
+      for (std::size_t i = 0; i < indices.size(); i++) {
+        indices[i] = Indices[i] + offsetVertex;
+      }
+
+      indexBuffer->Update(gsl::span<const std::uint16_t>(indices), offsetIndex);
     }
   };
 
@@ -144,8 +144,8 @@ namespace SimpleGE
               {
                 // On crée ici un tableau de 4 vertices permettant de représenter
                 // le rectangle à afficher.
-                impl->vertexBuffer = Graphic::VertexBuffer::Create(gsl::span<const Vertex>(impl->vertices),
-                                                                   Graphic::VertexBuffer::Usage::Dynamic);
+                //impl->vertexBuffer = Graphic::VertexBuffer::Create(gsl::span<const Vertex>(impl->vertices),
+                //                                                   Graphic::VertexBuffer::Usage::Dynamic);
 
                 // On crée ici un tableau de 6 indices, soit 2 triangles, pour
                 // représenter quels vertices participent à chaque triangle:
@@ -159,12 +159,12 @@ namespace SimpleGE
                 // +----+
                 // 3    2
                 // ```
-                impl->indexBuffer = Graphic::IndexBuffer::Create(gsl::span<const std::uint16_t>(impl->Indices),
-                                                                 Graphic::IndexBuffer::Usage::Dynamic);
+                //impl->indexBuffer = Graphic::IndexBuffer::Create(gsl::span<const std::uint16_t>(impl->Indices),
+                //                                                 Graphic::IndexBuffer::Usage::Dynamic);
 
                 // Et on initialise le contenu des vertices
                 impl->UpdateMesh();
-                impl->UpdateComponents(Owner());
+                //impl->UpdateComponents(Owner());
               }}}};
   }
 
@@ -185,7 +185,7 @@ namespace SimpleGE
       }
     }
 
-    impl->UpdateComponents(Owner());
+    //impl->UpdateComponents(Owner());
   }
 
   // La méthode *display* choisit le shader et la texture appropriée
@@ -209,7 +209,7 @@ namespace SimpleGE
   void SpriteComponent::SetSpriteName(std::string_view spriteName)
   {
     impl->spriteName = spriteName;
-    impl->UpdateComponents(Owner());
+    //impl->UpdateComponents(Owner());
   }
 
   void SpriteComponent::RegisterAnimationEndedEvent(const AnimationEndedEventType& onAnimationEnded)
@@ -222,8 +222,12 @@ namespace SimpleGE
     return impl->spriteSheet;
   }
 
-  std::shared_ptr<Graphic::VertexBuffer> SpriteComponent::GetVertexBuffer() const { return impl->vertexBuffer; }
-  std::shared_ptr<Graphic::IndexBuffer> SpriteComponent::GetIndexBuffer() const { return impl->indexBuffer; }
+  // std::shared_ptr<Graphic::VertexBuffer> SpriteComponent::GetVertexBuffer() const { return impl->vertexBuffer; }
+  // std::shared_ptr<Graphic::IndexBuffer> SpriteComponent::GetIndexBuffer() const { return impl->indexBuffer; }
   std::array<std::uint16_t, 6> SpriteComponent::GetIndices() const { return impl->Indices; }
+
+  void SpriteComponent::UpdateComponents(std::shared_ptr<Graphic::VertexBuffer>& vertexBuffer, int offsetVertex, std::shared_ptr<Graphic::IndexBuffer>& indexBuffer, int offsetIndex) {
+    impl->UpdateComponents(Owner(), vertexBuffer, offsetVertex, indexBuffer, offsetIndex);
+  }
 
 } // namespace SimpleGE

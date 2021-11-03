@@ -4,10 +4,16 @@
 
 #include <simplege/components/visual.h>
 
+#include <simplege/graphics/buffer.h>
+
 namespace SimpleGE
 {
   class LayerComponent : public VisualComponent
   {
+  private:
+    std::shared_ptr<Graphic::VertexBuffer> m_vertexBuffer;
+    std::shared_ptr<Graphic::IndexBuffer> m_indexBuffer;
+
   public:
     static constexpr auto Type = "Layer";
 

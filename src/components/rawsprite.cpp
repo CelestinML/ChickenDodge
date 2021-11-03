@@ -25,12 +25,6 @@ namespace SimpleGE
     }
   }
 
-  struct Vertex
-  {
-    float x, y, z;
-    float u, v;
-  };
-
   struct RawSpriteImpl
   {
     std::shared_ptr<Graphic::VertexBuffer> vertexBuffer;
