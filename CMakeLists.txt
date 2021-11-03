@@ -32,6 +32,8 @@ FetchContent_Declare(zlib
   GIT_TAG         v1.2.11
 )
 
+set(PNG_SHARED OFF)
+
 FetchContent_GetProperties(fmt)
 if(NOT fmt_POPULATED)
   FetchContent_Populate(fmt)
@@ -94,8 +96,6 @@ endif()
 FetchContent_GetProperties(libpng)
 if(NOT libpng_POPULATED)
     FetchContent_Populate(libpng)
-
-    set(PNG_SHARED OFF)
 
     add_subdirectory(${libpng_SOURCE_DIR} ${libpng_BINARY_DIR} EXCLUDE_FROM_ALL)
 endif()
