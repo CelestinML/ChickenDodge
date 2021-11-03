@@ -22,9 +22,7 @@ void main(void) {
     Mettre cette intensité à l’échelle `uScale`.
     */
     //intensity is a bit map with greyscale values, sampling result should be [black->white->black]
-    //Clamp function avoids mod(?,0) in the next step. If intensity = 0, the screen could flick when the effect starts/ends
-    //Could replace the clamp with if statement
-    float deform_intensity = clamp(float(texture2D(uIntensity,vec2(uTime,0.5))),0.001,10.0)*uScale;
+    float deform_intensity = float(texture2D(uIntensity,vec2(uTime,0.5))) * uScale;
     
     
     /*
@@ -32,7 +30,7 @@ void main(void) {
     aux coordonnées `vTextureCoord` décalé d’une valeur tirée de `uTime` 
     (par exemple, le sinus de `uTime`). Moduler ce vecteur de déformation par l’intensité précédente.
     */
-    vec4 deform_vec = mod(texture2D(uDeformation,vTextureCoord+vec2(sin(uTime),sin(uTime))),deform_intensity);
+    vec4 deform_vec = texture2D(uDeformation,vTextureCoord+vec2(cos(uTime),sin(uTime))) * deform_intensity;
     
     /*
      Chercher la couleur finale dans `uSampler` aux coordonnées `vTextureCoord`, décalées du vecteur de déformation.
