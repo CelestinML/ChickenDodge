@@ -1,5 +1,7 @@
 #include <simplege/simplege.h>
 
+#include "../graphics/graphicapi.h"
+
 namespace SimpleGE
 {
   static std::vector<gsl::not_null<SpriteComponent*>> ListSprites(const std::shared_ptr<Entity>& owner)
@@ -44,6 +46,11 @@ namespace SimpleGE
     auto spriteSheet = gsl::at(layerSprites, 0)->GetSpriteSheet();
     Ensures(spriteSheet.Ready());
     //Display the layer's sprites
+    for (auto sprite : layerSprites) {
+      spriteSheet->Bind(sprite->GetVertexBuffer(), sprite->GetIndexBuffer());
+      glDrawElements(GL_TRIANGLES, (GLsizei) sprite->GetIndices().size(), GL_UNSIGNED_SHORT, nullptr);
+      spriteSheet->Unbind();
+    }
     
   }
 } // namespace SimpleGE

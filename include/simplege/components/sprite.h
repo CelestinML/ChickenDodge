@@ -47,6 +47,10 @@ namespace SimpleGE
 
     [[nodiscard]] ComponentReference<SpriteSheetComponent> GetSpriteSheet() const;
 
+    std::shared_ptr<Graphic::VertexBuffer> GetVertexBuffer() const;
+    std::shared_ptr<Graphic::IndexBuffer> GetIndexBuffer() const;
+    std::array<std::uint16_t, 6> GetIndices() const;
+
   private:
     std::unique_ptr<SpriteImpl> impl;
   };

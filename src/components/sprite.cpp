@@ -193,9 +193,9 @@ namespace SimpleGE
   // tableau de vertices et d'indices et fait l'appel de rendu.
   void SpriteComponent::Display(const Timing& timing)
   {
-    impl->spriteSheet->Bind(impl->vertexBuffer, impl->indexBuffer);
-    glDrawElements(GL_TRIANGLES, (GLsizei) impl->Indices.size(), GL_UNSIGNED_SHORT, nullptr);
-    impl->spriteSheet->Unbind();
+    // impl->spriteSheet->Bind(impl->vertexBuffer, impl->indexBuffer);
+    // glDrawElements(GL_TRIANGLES, (GLsizei) impl->Indices.size(), GL_UNSIGNED_SHORT, nullptr);
+    // impl->spriteSheet->Unbind();
   }
 
   void SpriteComponent::SetFrameSkip(int val) { impl->frameSkip = val; }
@@ -221,5 +221,9 @@ namespace SimpleGE
   {
     return impl->spriteSheet;
   }
+
+  std::shared_ptr<Graphic::VertexBuffer> SpriteComponent::GetVertexBuffer() const { return impl->vertexBuffer; }
+  std::shared_ptr<Graphic::IndexBuffer> SpriteComponent::GetIndexBuffer() const { return impl->indexBuffer; }
+  std::array<std::uint16_t, 6> SpriteComponent::GetIndices() const { return impl->Indices; }
 
 } // namespace SimpleGE
