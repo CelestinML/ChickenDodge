@@ -30,10 +30,11 @@ void main(void) {
     aux coordonnées `vTextureCoord` décalé d’une valeur tirée de `uTime` 
     (par exemple, le sinus de `uTime`). Moduler ce vecteur de déformation par l’intensité précédente.
     */
-    vec4 deform_vec = texture2D(uDeformation,vTextureCoord+vec2(cos(uTime),sin(uTime))) * deform_intensity;
-    
+    vec4 deform_vec = texture2D(uDeformation,vTextureCoord+sin(vec2(uTime,uTime))) * deform_intensity;
+
     /*
-     Chercher la couleur finale dans `uSampler` aux coordonnées `vTextureCoord`, décalées du vecteur de déformation.
+    Chercher la couleur finale dans `uSampler` aux coordonnées `vTextureCoord`, décalées du vecteur de déformation.
+    On soustrait par deform_vec.w / 2 qui correspond à la translation recentrée
     */
-    gl_FragColor = texture2D(uSampler, vTextureCoord+deform_vec.xy);
+    gl_FragColor = texture2D(uSampler, vTextureCoord+deform_vec.xy - deform_vec.w / 2);
 }
