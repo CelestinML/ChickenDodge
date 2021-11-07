@@ -1,5 +1,14 @@
 # Notes
 
+Voici les membres de notre équipe :
+- MINOT Eva
+- MOËNNE-LOCCOZ Célestin
+- GARBANI Adrien 
+- NI Xiaohan
+
+Si le projet dézippé ne fonctionne pas, vous pouvez essayer de récupérer notre projet git via ce lien :
+https://github.com/CelestinML/ChickenDodge
+
 ## Windows
 
 Le script de configuration utilise des liens symboliques, qui demande soit de lancer le script en administrateur, soit d'activer le [mode "developer" de Windows](https://www.ghacks.net/2016/12/04/windows-10-creators-update-symlinks-without-elevation/).
