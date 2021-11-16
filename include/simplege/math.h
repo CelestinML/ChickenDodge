@@ -2,6 +2,8 @@
 
 #include <simplege/pch/precomp.h>
 
+#include <quadtree/Box.h>
+
 namespace SimpleGE
 {
   template<std::size_t W>
@@ -229,5 +231,10 @@ namespace SimpleGE
 
     Point<2> position{};
     Size<float> size{};
+
+    operator quadtree::Box<float>()
+    {
+      return quadtree::Box<float>(xMin(), yMin(), width(), height());
+    }
   };
 } // namespace SimpleGE
