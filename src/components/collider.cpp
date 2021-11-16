@@ -47,9 +47,14 @@ namespace SimpleGE
 
   [[nodiscard]] bool ColliderComponent::Collides(const ColliderComponent& other) const
   {
+    //On vérifie la pertinence de la collision grâce aux drapeaux et aux masques
+    //(nous devons vérifier dans les deux sens car les masques ne sont pas symétriques)
     if (((impl->flag & other.impl->mask) == 0) && ((impl->mask & other.impl->flag) == 0)) {
       return false;
     }
+    //Si la collision est pertinente, nous vérifions si la collision pourrait réellement avoir
+    //lieu grâce aux rectangles englobants.
+    //Si c'est le cas, alors nous examinerons la collision plus précisément.
     return GetArea().Intersects(other.GetArea());
   }
 
