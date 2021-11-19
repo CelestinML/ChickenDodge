@@ -68,7 +68,23 @@ namespace SimpleGE
 
       auto collisions = quadtree.findAllIntersections();
 
-      std::cout << "Collisions évalués cette frame : " << nCollision << std::endl;
+      using namespace std::chrono_literals;
+      constexpr auto printThreshold = 5s;
+
+      static std::size_t nCollisionTot = 0;
+      static auto deltaTot = 0ms;
+      static unsigned int frameTot = 0;
+      nCollisionTot += nCollision;
+      deltaTot += timing.delta;
+      ++frameTot;
+
+      if(deltaTot > printThreshold)
+      {
+        std::cout << "Nombre moyen de Collisions évalués par frame : " << static_cast<float>(nCollisionTot) / static_cast<float>(frameTot) << std::endl;
+        nCollisionTot = 0;
+        deltaTot = 0ms;
+        frameTot = 0;
+      }
 
       for (auto col : collisions)
       {
