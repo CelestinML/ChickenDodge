@@ -43,6 +43,12 @@ namespace SimpleGE
         }
       }
 
+      const auto* currentCamera = CameraComponent::Current();
+      Ensures(currentCamera != nullptr);
+
+      const auto viewWidth = currentCamera->ViewWidth();
+      const auto viewHeight = currentCamera->ViewHeight();
+
       std::size_t nCollision = 0;
 
       using Type = gsl::not_null<ColliderComponent*>;
@@ -50,7 +56,7 @@ namespace SimpleGE
       using Collides = std::function<bool(const Type &, const Type &)>;
 
       quadtree::Quadtree<Type, GetBox, Collides, 4> quadtree {
-          quadtree::Box<float>(0.f, 0.f, 960.f, 720.f),
+          quadtree::Box<float>(0.f, 0.f, viewWidth, viewHeight),
           [](const Type & c){ return c->GetArea(); },
           [&nCollision](const Type & c1, const Type & c2){ ++nCollision; return c1->Collides(*c2); }
         };
