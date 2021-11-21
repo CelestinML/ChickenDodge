@@ -43,6 +43,7 @@ namespace SimpleGE
         }
       }
 
+      //We get the game window's dimensions
       const auto* currentCamera = CameraComponent::Current();
       Ensures(currentCamera != nullptr);
 
@@ -51,6 +52,7 @@ namespace SimpleGE
 
       std::size_t nCollision = 0;
 
+      //We create a quad tree, specifying all the required functions (GetArea, Collides...)
       using Type = gsl::not_null<ColliderComponent*>;
       using GetBox = std::function<quadtree::Box<float>(const Type &)>;
       using Collides = std::function<bool(const Type &, const Type &)>;
@@ -61,13 +63,17 @@ namespace SimpleGE
           [&nCollision](const Type & c1, const Type & c2){ ++nCollision; return c1->Collides(*c2); }
         };
 
+      //We add all our colliders to the quadtree
+      //Once there are more than 4 objects in a quad, a smaller quad will be created
       for(auto c : collidersVec)
       {
         if(quadtree.getBox().contains(c->GetArea())) quadtree.add(c);
       }
 
+      //We iterate through the quadtree to find intersections, using the bounding boxes colliders
       auto collisions = quadtree.findAllIntersections();
 
+      //We calculate the mean number of collisions and print it every 5 seconds
       using namespace std::chrono_literals;
       constexpr auto printThreshold = 5s;
 
@@ -80,12 +86,13 @@ namespace SimpleGE
 
       if(deltaTot > printThreshold)
       {
-        std::cout << "Nombre moyen de Collisions évalués par frame : " << static_cast<float>(nCollisionTot) / static_cast<float>(frameTot) << std::endl;
+        std::cout << "Nombre moyen de Collisions evaluees par frame : " << static_cast<float>(nCollisionTot) / static_cast<float>(frameTot) << std::endl;
         nCollisionTot = 0;
         deltaTot = 0ms;
         frameTot = 0;
       }
 
+      //We start the collision callbacks for both object
       for (auto col : collisions)
       {
         col.first->OnCollision(*col.second);
