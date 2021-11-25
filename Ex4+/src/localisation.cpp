@@ -2,6 +2,8 @@
 
 #include <fmt/core.h>
 
+#include <regex>
+
 using json = nlohmann::json;
 
 namespace SimpleGE
@@ -33,9 +35,14 @@ namespace SimpleGE
       return std::string(key);
     }
 
-    // ***TODO***: Implémenter la substitution de clés
-    fmt::print("mergedContext: {}\n", json(mergedContext).dump());
+    std::string result = localized->second;
 
-    return localized->second;
+    for(const auto & [key, value] : mergedContext)
+    {
+      std::regex regex("\\{" + key + "\\}");
+      result = std::regex_replace(result, regex, value);
+    }
+
+    return result;
   }
 } // namespace SimpleGE
