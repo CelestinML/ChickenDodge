@@ -37,10 +37,14 @@ namespace SimpleGE
 
     std::string result = localized->second;
 
-    for(const auto & [key, value] : mergedContext)
+    std::regex search("\\{([^\\}]*)\\}");
+    std::smatch match;
+    std::size_t offset = 0;
+    while(std::regex_search(result.cbegin() + offset, result.cend(), match, search))
     {
-      std::regex regex("\\{" + key + "\\}");
-      result = std::regex_replace(result, regex, value);
+      std::string new_text = mergedContext.at(match.str(1));
+      result.replace(match[0].first, match[0].first + match[0].length(),new_text);
+      offset += match.position(0) + new_text.length();
     }
 
     return result;
