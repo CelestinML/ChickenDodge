@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "2gua.rainbow-brackets",
+    "llvm-vs-code-extensions.vscode-clangd",
+    "ms-vscode.cmake-tools",
+    "ms-vscode.cpptools",
+    "oderwat.indent-rainbow",
+    "slevesque.shader"
+  ]
+}
