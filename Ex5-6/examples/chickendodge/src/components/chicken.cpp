@@ -6,6 +6,11 @@ using json = nlohmann::json;
 
 using namespace SimpleGE;
 
+namespace
+{
+  int g_nbChicken = 0;
+}
+
 namespace ChickenDodge
 {
   static void from_json(const json& j, ChickenComponent::Description& desc)
@@ -63,6 +68,8 @@ namespace ChickenDodge
     impl->heartTemplate = descr.heartTemplate;
     impl->attack = descr.attack;
 
+    AudioSystem::SetProperty("NbChicken", ++g_nbChicken);
+
     return {this,
             {{[this]() { return Owner().GetComponent<PositionComponent>()->Ready(); },
               [this]()
@@ -100,6 +107,7 @@ namespace ChickenDodge
     if (impl->distance > 500.F)
     {
       Owner().GetParent()->RemoveChild(Owner());
+      AudioSystem::SetProperty("NbChicken", --g_nbChicken);
     }
   }
 

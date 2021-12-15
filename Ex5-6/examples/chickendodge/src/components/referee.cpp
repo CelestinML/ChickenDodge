@@ -30,6 +30,7 @@ namespace ChickenDodge
                 {"LOSER", std::string(loser.GetName())},
             };
             std::cout << Localisation::Get("winMessage", queryContext) << std::endl;
+            AudioSystem::SendEvent("end");
           });
 
       return {&comp,

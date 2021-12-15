@@ -35,6 +35,8 @@ namespace ChickenDodge
     impl->value = randomType->second;
     impl->remaining = descr.lifetime;
 
+    AudioSystem::SendEvent("rupee_drop");
+
     return {this,
             {{[this]() { return Owner().GetComponent<SpriteComponent>()->Ready(); },
               [this]()

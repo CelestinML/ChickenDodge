@@ -31,6 +31,8 @@ namespace ChickenDodge
     impl->heal = descr.heal;
     impl->remaining = descr.lifetime;
 
+    AudioSystem::SendEvent("heart_drop");
+
     return {this, {}};
   }
 
