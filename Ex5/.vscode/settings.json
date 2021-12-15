@@ -1,0 +1,22 @@
+{
+  "cmake.copyCompileCommands": "${workspaceFolder}/compile_commands.json",
+  "cmake.debugConfig": {
+    "console": "newExternalWindow"
+  },
+  "files.associations": {
+    "*.rh": "cpp",
+    "chrono": "cpp",
+    "deque": "cpp",
+    "list": "cpp",
+    "map": "cpp",
+    "queue": "cpp",
+    "set": "cpp",
+    "vector": "cpp",
+    "xhash": "cpp",
+    "xtree": "cpp",
+    "multi_span": "cpp",
+    "memory": "cpp",
+    "utility": "cpp",
+    "unordered_set": "cpp"
+  }
+}
